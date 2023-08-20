@@ -52,7 +52,28 @@ app.post('/link', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json(result.records[0].get('r'));
     }
     catch (error) {
-        res.status(500).json({ error: 'An error occurred while creating the relationship.' });
+        res.status(500).json({ error: 'An error occurred while creating the relationship.', extras: { error } });
+    }
+}));
+// Retrieve all Grads with their Syndicates
+app.get('/grad', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield session.run('MATCH (g:Grad)-[:WORKED_ON]->(s:Syndicate) ' +
+            'RETURN g.name AS gradName, g.email AS gradEmail, s.name AS syndicateName, s.levelUp AS syndicateLevelUp');
+        const gradsWithSyndicates = result.records.map(record => ({
+            grad: {
+                name: record.get('gradName'),
+                email: record.get('gradEmail'),
+            },
+            syndicate: {
+                name: record.get('syndicateName'),
+                levelUp: record.get('syndicateLevelUp'),
+            },
+        }));
+        res.json(gradsWithSyndicates);
+    }
+    catch (error) {
+        res.status(500).json({ error: 'An error occurred while fetching grads with syndicates.', extras: { error } });
     }
 }));
 app.listen(PORT, () => {
