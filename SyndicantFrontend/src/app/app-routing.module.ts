@@ -11,7 +11,8 @@ const routes: Routes = [
   { path: 'add-syndicate', component: AddSyndicateComponent },
   { path: 'syndicate-allocation', component: SyndicateAllocationComponent },
   { path: 'grad-list', component: GradListComponent },
-  { path: 'home', component: HomeComponent }
+  { path: 'home', component: HomeComponent },
+  { path: '', component: HomeComponent }
 ];
 
 @NgModule({
