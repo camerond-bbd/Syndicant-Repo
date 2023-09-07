@@ -21,6 +21,9 @@ const driver = neo4j_driver_1.default.driver(DB_LINK, neo4j_driver_1.default.aut
 const session = driver.session();
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
+app.get('/health', (req, res) => {
+    res.sendStatus(200);
+});
 // Create Syndicate node
 app.post('/syndicate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, levelUp } = req.body;

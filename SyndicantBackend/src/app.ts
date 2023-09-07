@@ -16,6 +16,10 @@ const session = driver.session();
 const app: Application = express();
 app.use(bodyParser.json());
 
+app.get('/health', (req: Request, res: Response): void => {
+  res.sendStatus(200);
+});
+
 // Create Syndicate node
 app.post('/syndicate', async (req: Request, res: Response): Promise<void> => {
   const { name, levelUp } = req.body;
