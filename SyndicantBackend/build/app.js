@@ -16,21 +16,23 @@ const express_1 = __importDefault(require("express"));
 require("dotenv/config");
 const neo4j_driver_1 = __importDefault(require("neo4j-driver"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const cors_1 = __importDefault(require("cors"));
 const { DB_LINK = '', DB_USER = '', DB_PASS = '', PORT = 3001, } = process.env;
 const driver = neo4j_driver_1.default.driver(DB_LINK, neo4j_driver_1.default.auth.basic(DB_USER, DB_PASS));
 const session = driver.session();
 const app = (0, express_1.default)();
+app.use((0, cors_1.default)({
+    origin: '*'
+}));
 app.use(body_parser_1.default.json());
 app.get('/health', (req, res) => {
     res.sendStatus(200);
 });
 // Create Syndicate node
 app.post('/syndicate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req);
     const { name, levelUp } = req.body;
-    console.log({ name, levelUp });
     try {
-        const result = yield session.run('CREATE (s:Syndicate {name: $name, levelUp: $levelUp}) RETURN s', { name, levelUp });
+        const result = yield session.run('CREATE (s:Syndicate {name: $name, levelUp: $levelUp}) RETURN s', { name: name, levelUp: levelUp });
         res.json(result.records[0].get('s'));
     }
     catch (error) {

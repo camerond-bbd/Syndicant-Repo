@@ -16,6 +16,7 @@
     "neo4j-driver": "^5.11.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.14",
     "@types/express": "^4.17.17",
     "@types/node": "^20.5.0",
     "typescript": "^5.1.6"
