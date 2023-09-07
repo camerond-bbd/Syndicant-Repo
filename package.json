@@ -1,0 +1,20 @@
+{
+  "name": "syndicant-repo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-backend": "cd SyndicantBackend && npm i",
+    "start-backend": "cd SyndicantBackend && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/camerond-bbd/Syndicant-Repo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/camerond-bbd/Syndicant-Repo/issues"
+  },
+  "homepage": "https://github.com/camerond-bbd/Syndicant-Repo#readme"
+}
