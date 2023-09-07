@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build-frontend": "cd SyndicantFrontend && npm i",
+    "start-frontend": "cd SyndicantFrontend && npm start",
+    "build-backend": "cd SyndicantBackend && npm i",
+    "start-backend": "cd SyndicantBackend && npm start"
   },
   "repository": {
     "type": "git",
