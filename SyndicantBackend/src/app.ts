@@ -6,15 +6,19 @@ import bodyParser from 'body-parser';
 const {
   DB_LINK = '',
   DB_USER = '',
-  DP_PASS = '',
+  DB_PASS = '',
   PORT = 3001,
 } = process.env;
 
-const driver = neo4j.driver(DB_LINK, neo4j.auth.basic(DB_USER, DP_PASS))
+const driver = neo4j.driver(DB_LINK, neo4j.auth.basic(DB_USER, DB_PASS))
 const session = driver.session();
 
 const app: Application = express();
 app.use(bodyParser.json());
+
+app.get('/health', (req: Request, res: Response): void => {
+  res.sendStatus(200);
+});
 
 // Create Syndicate node
 app.post('/syndicate', async (req: Request, res: Response): Promise<void> => {

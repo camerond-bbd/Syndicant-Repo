@@ -16,11 +16,14 @@ const express_1 = __importDefault(require("express"));
 require("dotenv/config");
 const neo4j_driver_1 = __importDefault(require("neo4j-driver"));
 const body_parser_1 = __importDefault(require("body-parser"));
-const { DB_LINK = '', DB_USER = '', DP_PASS = '', PORT = 3001, } = process.env;
-const driver = neo4j_driver_1.default.driver(DB_LINK, neo4j_driver_1.default.auth.basic(DB_USER, DP_PASS));
+const { DB_LINK = '', DB_USER = '', DB_PASS = '', PORT = 3001, } = process.env;
+const driver = neo4j_driver_1.default.driver(DB_LINK, neo4j_driver_1.default.auth.basic(DB_USER, DB_PASS));
 const session = driver.session();
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
+app.get('/health', (req, res) => {
+    res.sendStatus(200);
+});
 // Create Syndicate node
 app.post('/syndicate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, levelUp } = req.body;
