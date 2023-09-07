@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GetGradsRequest } from 'src/app/models/GetGradsRequest';
 import { RequestService } from 'src/app/services/request.service';
 
 @Component({
@@ -11,6 +12,8 @@ export class GradListComponent implements OnInit {
   constructor(private httpService: RequestService) { }
 
   ngOnInit(): void {
+    this.httpService.GetAllGradsRequest(new GetGradsRequest()).subscribe((res) => {
+      
+    });
   }
-
 }
