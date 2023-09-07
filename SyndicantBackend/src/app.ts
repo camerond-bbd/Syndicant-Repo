@@ -1,7 +1,7 @@
 import express, { Application, Request, Response } from 'express';
 import 'dotenv/config';
 import neo4j from 'neo4j-driver';
-import bodyParser from 'body-parser';
+import bodyParser, { json } from 'body-parser';
 
 const {
   DB_LINK = '',
@@ -39,7 +39,7 @@ app.post('/syndicate', async (req: Request, res: Response): Promise<void> => {
 // Create Grad node
 app.post('/grad', async (req: Request, res: Response): Promise<void>  => {
   const { name, email } = req.body;
-
+  console.log(req.body);
   try {
     const result = await session.run(
       'CREATE (g:Grad {name: $name, email: $email}) RETURN g',
@@ -92,6 +92,46 @@ app.get('/grad', async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching grads with syndicates.', extras: { error } });
   }
+});
+
+app.get('/worked_with', async (req: Request, res:Response): Promise<void> => {
+
+  try {
+    const gradListString = JSON.stringify (req.body.grad_list);
+    const gradList: string[] = req.body.grad_list; 
+    const workedWithDict: any = {}
+
+    gradList.forEach(email => workedWithDict[email] = []);
+
+    console.log(gradList)
+
+    const query = 
+    'MATCH (grad_one: Grad WHERE grad_one.email IN $grad_list)' +
+    '-[r:WORKED_ON]->' +
+    '(s:Syndicate)<-[WORKED_ON]-(grad_two: Grad WHERE grad_one.email IN $grad_list)' + 
+    'RETURN grad_one, grad_two';
+
+    console.log(query);
+
+    const result = await session.run(
+      query, {grad_list: gradList}
+    );
+
+    result.records.forEach(record => {
+      let grad1 = record.get("grad_one").properties.email;
+      let grad2 = record.get("grad_two").properties.email;
+
+      workedWithDict[grad1].push(grad2);
+    })
+    
+
+    res.json(workedWithDict)
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({error: "An error occured"} )
+  }
+
 });
 
 app.listen(PORT, (): void => {
