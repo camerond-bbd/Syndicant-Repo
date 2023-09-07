@@ -27,7 +27,7 @@ app.post('/syndicate', async (req: Request, res: Response): Promise<void> => {
   try {
     const result = await session.run(
       'CREATE (s:Syndicate {name: $name, levelUp: $levelUp}) RETURN s',
-      { name, levelUp }
+      { name: name, levelUp: levelUp }
     );
 
     res.json(result.records[0].get('s'));
