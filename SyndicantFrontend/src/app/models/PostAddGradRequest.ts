@@ -1,6 +1,8 @@
 import { IRequest } from "./IResponse";
 
-export interface PostAddGradRequest extends IRequest {
-    name: string;
-    email: string;
+export class PostAddGradRequest implements IRequest {
+    constructor(
+        name: string,
+        email: string
+    ) { }
 }

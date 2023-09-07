@@ -26,9 +26,7 @@ app.get('/health', (req, res) => {
 });
 // Create Syndicate node
 app.post('/syndicate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req);
     const { name, levelUp } = req.body;
-    console.log({ name, levelUp });
     try {
         const result = yield session.run('CREATE (s:Syndicate {name: $name, levelUp: $levelUp}) RETURN s', { name, levelUp });
         res.json(result.records[0].get('s'));

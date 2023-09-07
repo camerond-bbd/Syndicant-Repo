@@ -12,8 +12,12 @@ export class GradListComponent implements OnInit {
   constructor(private httpService: RequestService) { }
 
   ngOnInit(): void {
+    
+  }
+
+  addGrad(): void {
     this.httpService.GetAllGradsRequest(new GetGradsRequest()).subscribe((res) => {
-      
+      console.log("Succesh");
     });
   }
 }
