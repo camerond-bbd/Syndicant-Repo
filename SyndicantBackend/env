@@ -1,0 +1,4 @@
+PORT=3001
+DB_LINK=neo4j+s://df7ecb77.databases.neo4j.io:7687
+DP_USER=neo4j
+DB_PASS=JuuPoWNDtxsy_WU8HJ0R4bxYfTqLIKasHwhw5MSTwwU

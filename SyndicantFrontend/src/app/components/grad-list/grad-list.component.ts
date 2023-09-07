@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RequestService } from 'src/app/services/request.service';
 
 @Component({
   selector: 'app-grad-list',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GradListComponent implements OnInit {
 
-  constructor() { }
+  constructor(private httpService: RequestService) { }
 
   ngOnInit(): void {
   }
