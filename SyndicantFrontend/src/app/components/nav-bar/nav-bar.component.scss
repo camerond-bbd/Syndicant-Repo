@@ -1,0 +1,49 @@
+@import 'src/styles.scss';
+
+nav {
+    background-color: $primary-color;
+
+    width: 100%;
+
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-heading {
+    flex-grow: 1;
+
+    display: flex;
+    justify-content: center;
+}
+
+h1 {
+
+}
+
+h1 a {
+    text-decoration: none;
+}
+
+.nav-items {
+    flex-grow: 1;
+
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.nav-item {
+    flex-grow: 1;
+
+    padding: 2%;
+
+    color: $tertiary-color;
+}
+
+.nav-item:hover {
+    cursor: pointer;
+    background-color: $tertiary-color;
+    color: $primary-color;
+}

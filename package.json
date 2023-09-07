@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build-frontend": "cd SyndicantFrontend && npm i",
+    "start-frontend": "cd SyndicantFrontend && npm start",
     "build-backend": "cd SyndicantBackend && npm i",
     "start-backend": "cd SyndicantBackend && npm start"
   },
