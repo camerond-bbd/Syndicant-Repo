@@ -16,10 +16,14 @@ const express_1 = __importDefault(require("express"));
 require("dotenv/config");
 const neo4j_driver_1 = __importDefault(require("neo4j-driver"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const cors_1 = __importDefault(require("cors"));
 const { DB_LINK = '', DB_USER = '', DB_PASS = '', PORT = 3001, } = process.env;
 const driver = neo4j_driver_1.default.driver(DB_LINK, neo4j_driver_1.default.auth.basic(DB_USER, DB_PASS));
 const session = driver.session();
 const app = (0, express_1.default)();
+app.use((0, cors_1.default)({
+    origin: '*'
+}));
 app.use(body_parser_1.default.json());
 app.get('/health', (req, res) => {
     res.sendStatus(200);
@@ -28,7 +32,7 @@ app.get('/health', (req, res) => {
 app.post('/syndicate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, levelUp } = req.body;
     try {
-        const result = yield session.run('CREATE (s:Syndicate {name: $name, levelUp: $levelUp}) RETURN s', { name, levelUp });
+        const result = yield session.run('CREATE (s:Syndicate {name: $name, levelUp: $levelUp}) RETURN s', { name: name, levelUp: levelUp });
         res.json(result.records[0].get('s'));
     }
     catch (error) {
@@ -38,12 +42,26 @@ app.post('/syndicate', (req, res) => __awaiter(void 0, void 0, void 0, function*
 // Create Grad node
 app.post('/grad', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email } = req.body;
+    console.log(req.body);
     try {
         const result = yield session.run('CREATE (g:Grad {name: $name, email: $email}) RETURN g', { name, email });
         res.json(result.records[0].get('g'));
     }
     catch (error) {
         res.status(500).json({ error: 'An error occurred while creating the grad.', extras: { error } });
+    }
+}));
+app.post('/link_to_syndicate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { syndicate, gradEmail } = req.body;
+    try {
+        const result = yield session.run('MATCH (s:Syndicate {levelUp:$syndicate.levelUp, name:$syndicate.name}), (g:Grad WHERE g.email = $gradEmail) ' +
+            'CREATE (s)-[r:WORKED_ON]->(g) RETURN r', { syndicate, gradEmail });
+        console.log(result);
+        res.json(result.records[0].get('r'));
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'An error occurred while creating the relationship.', extras: { error } });
     }
 }));
 // Create relationship between Team and Grad (Individual)
@@ -56,6 +74,28 @@ app.post('/link', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         res.status(500).json({ error: 'An error occurred while creating the relationship.', extras: { error } });
+    }
+}));
+// get all syndicates
+app.get('/syndicate/all', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield session.run('Match (s:Syndicate) RETURN s');
+        res.json(result.records.map(record => record.get('s').properties));
+    }
+    catch (error) {
+        res.status(500).json({ error: 'An error occurred while retrieving all syndicates.', extras: { error } });
+    }
+}));
+//get syndicates in levelup
+app.get('/syndicate/for-levelup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const levelUp = req.body;
+    try {
+        const result = yield session.run('Match (s:Syndicate {levelUp:$levelUp}) RETURN s', levelUp);
+        res.json(result.records.map(record => record.get('s').properties));
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'An error occurred while retrieving all syndicates.', extras: { error } });
     }
 }));
 // Retrieve all Grads with their Syndicates
@@ -77,6 +117,61 @@ app.get('/grad', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         res.status(500).json({ error: 'An error occurred while fetching grads with syndicates.', extras: { error } });
+    }
+}));
+app.get('/grad/all', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield session.run('Match (g:Grad) RETURN g');
+        res.json(result.records.map(record => record.get('g').properties));
+    }
+    catch (error) {
+        res.status(500).json({ error: 'An error occurred while retrieving all grads.', extras: { error } });
+    }
+}));
+app.get('/grad/in-syndicate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const syndicate = req.body;
+    try {
+        const result = yield session.run('Match (g:Grad)-[WORKED_ON]->(s:Syndicate {name:$syndicate.name, levelUp:$syndicate.levelUp}) RETURN g', { syndicate: syndicate });
+        res.json(result.records.map(record => record.get('g').properties));
+    }
+    catch (error) {
+        res.status(500).json({ error: 'An error occurred while retrieving grads in that syndicate.', extras: { error } });
+    }
+}));
+app.get('/grad/by_email', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body;
+    console.log(email);
+    try {
+        const result = yield session.run('Match (g:Grad {email:$email}) RETURN g', email);
+        res.json(result.records[0].get('g').properties);
+    }
+    catch (error) {
+        res.status(500).json({ error: 'An error occurred while retrieving that grad.', extras: { error } });
+    }
+}));
+app.get('/worked_with', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const gradListString = JSON.stringify(req.body.grad_list);
+        const gradList = req.body.grad_list;
+        const workedWithDict = {};
+        gradList.forEach(email => workedWithDict[email] = []);
+        console.log(gradList);
+        const query = 'MATCH (grad_one: Grad WHERE grad_one.email IN $grad_list)' +
+            '-[r:WORKED_ON]->' +
+            '(s:Syndicate)<-[WORKED_ON]-(grad_two: Grad WHERE grad_one.email IN $grad_list)' +
+            'RETURN grad_one, grad_two';
+        console.log(query);
+        const result = yield session.run(query, { grad_list: gradList });
+        result.records.forEach(record => {
+            let grad1 = record.get("grad_one").properties.email;
+            let grad2 = record.get("grad_two").properties.email;
+            workedWithDict[grad1].push(grad2);
+        });
+        res.json(workedWithDict);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "An error occured" });
     }
 }));
 app.listen(PORT, () => {
