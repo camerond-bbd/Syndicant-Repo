@@ -87,7 +87,7 @@ app.get('/syndicate/all', (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 }));
 //get syndicates in levelup
-app.get('/syndicate/for-levelup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/syndicate/for-levelup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const levelUp = req.body;
     try {
         const result = yield session.run('Match (s:Syndicate {levelUp:$levelUp}) RETURN s', levelUp);
@@ -95,7 +95,16 @@ app.get('/syndicate/for-levelup', (req, res) => __awaiter(void 0, void 0, void 0
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'An error occurred while retrieving all syndicates.', extras: { error } });
+        res.status(500).json({ error: 'An error occurred while retrieving syndicates for this levelUp.', extras: { error } });
+    }
+}));
+app.get('/levelups/all', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield session.run('MATCH (s:Syndicate) RETURN COLLECT(DISTINCT s.levelUp) as levelups');
+        res.json(result.records[0].get('levelups'));
+    }
+    catch (error) {
+        res.status(500).json({ error: 'An error occurred while retrieving all levelUps.', extras: { error } });
     }
 }));
 // Retrieve all Grads with their Syndicates
