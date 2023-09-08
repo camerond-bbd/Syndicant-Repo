@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import 'dotenv/config';
-import neo4j from 'neo4j-driver';
+import neo4j, { Result } from 'neo4j-driver';
 import bodyParser, { json } from 'body-parser';
 
 const {
@@ -51,6 +51,25 @@ app.post('/grad', async (req: Request, res: Response): Promise<void>  => {
     res.status(500).json({ error: 'An error occurred while creating the grad.', extras: { error } });
   }
 });
+
+
+app.post('/link_to_syndicate', async(req: Request, res: Response): Promise<void> => {
+  const {syndicate, gradEmail} = req.body;
+  try {
+    const result = await session.run(
+      'MATCH (s:Syndicate {levelUp:$syndicate.levelUp, name:$syndicate.name}), (g:Grad WHERE g.email = $gradEmail) ' +
+      'CREATE (s)-[r:WORKED_ON]->(g) RETURN r',
+      { syndicate, gradEmail }
+    );
+
+    console.log(result);
+
+    res.json(result.records[0].get('r'));
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: 'An error occurred while creating the relationship.', extras: { error } });
+  }
+})
 
 // Create relationship between Team and Grad (Individual)
 app.post('/link', async (req: Request, res: Response): Promise<void>  => {
