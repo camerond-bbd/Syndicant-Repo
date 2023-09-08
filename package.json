@@ -6,7 +6,7 @@
   "scripts": {
     "build-frontend": "cd SyndicantFrontend && npm i",
     "start-frontend": "cd SyndicantFrontend && npm start",
-    "build-backend": "cd SyndicantBackend && npm i",
+    "build-backend": "cd SyndicantBackend && npm i --save-dev @types/cors",
     "start-backend": "cd SyndicantBackend && npm start"
   },
   "repository": {

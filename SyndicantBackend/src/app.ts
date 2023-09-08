@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import 'dotenv/config';
 import neo4j from 'neo4j-driver';
 import bodyParser, { json } from 'body-parser';
+import cors from 'cors';
 
 const {
   DB_LINK = '',
@@ -14,6 +15,10 @@ const driver = neo4j.driver(DB_LINK, neo4j.auth.basic(DB_USER, DB_PASS))
 const session = driver.session();
 
 const app: Application = express();
+
+app.use(cors({
+  origin: '*'
+}));
 app.use(bodyParser.json());
 
 app.get('/health', (req: Request, res: Response): void => {
@@ -27,7 +32,7 @@ app.post('/syndicate', async (req: Request, res: Response): Promise<void> => {
   try {
     const result = await session.run(
       'CREATE (s:Syndicate {name: $name, levelUp: $levelUp}) RETURN s',
-      { name, levelUp }
+      { name: name, levelUp: levelUp }
     );
 
     res.json(result.records[0].get('s'));
