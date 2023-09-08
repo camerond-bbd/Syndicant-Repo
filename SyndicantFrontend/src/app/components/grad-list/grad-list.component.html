@@ -1,1 +1,5 @@
-<p>grad-list works!</p>
+<ol>
+    <ng-container *ngFor="let grad of grads;">
+        <li>{{ grad.name }} {{ grad.email }}</li>
+    </ng-container>    
+</ol>

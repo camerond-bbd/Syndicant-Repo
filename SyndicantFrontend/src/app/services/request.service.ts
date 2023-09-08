@@ -10,6 +10,7 @@ import { GetGradsResponse } from '../models/GetGradsResponse';
 import { PostAddLinkRequest } from '../models/PostLinkRequest';
 import { PostAddLinkResponse } from '../models/PostAddLinkResponse';
 import { Syndicate } from '../models/SyndicateModel';
+import { GradModel } from '../models/GradModel';
 
 @Injectable({
   providedIn: 'root'
@@ -44,8 +45,8 @@ export class RequestService {
     });
   }
 
-  public GetAllGradsRequest(request: GetGradsRequest): Observable<GetGradsResponse> {
-    return this.http.get<GetGradsResponse>(this.url + "grads/all");
+  public GetAllGradsRequest(request: GetGradsRequest): Observable<GradModel[]> {
+    return this.http.get<GradModel[]>(this.url + "grad/all");
   }
 
   public GetSyndicatesByLevelUp(levelUp: string) {
