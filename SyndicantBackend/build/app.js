@@ -54,8 +54,8 @@ app.post('/grad', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 app.post('/link_to_syndicate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { syndicate, gradEmail } = req.body;
     try {
-        const result = yield session.run('MATCH (s:Syndicate {levelUp:$syndicate.levelUp, name:$syndicate.name}), (g:Grad WHERE g.email = $gradEmail) ' +
-            'CREATE (s)-[r:WORKED_ON]->(g) RETURN r', { syndicate, gradEmail });
+        const result = yield session.run('MATCH (s:Syndicate), (g:Grad) WHERE s.name = $syndicate.name AND s.levelUp = $syndicate.levelUp AND g.email = $gradEmail ' +
+            'CREATE (s)<-[r:WORKED_ON]-(g) RETURN r', { syndicate, gradEmail });
         console.log(result);
         res.json(result.records[0].get('r'));
     }
@@ -166,10 +166,9 @@ app.post('/worked_with', (req, res) => __awaiter(void 0, void 0, void 0, functio
         gradList.forEach(email => workedWithDict[email] = []);
         console.log(gradList);
         const query = 'MATCH (grad_one: Grad WHERE grad_one.email IN $grad_list)' +
-            '-[r:WORKED_ON]->' +
-            '(s:Syndicate)<-[WORKED_ON]-(grad_two: Grad WHERE grad_one.email IN $grad_list)' +
+            '-[r:WORKED_ON]->(s:Syndicate)<-[WORKED_ON]-' +
+            '(grad_two: Grad WHERE grad_two.email IN $grad_list) ' +
             'RETURN grad_one, grad_two';
-        console.log(query);
         const result = yield session.run(query, { grad_list: gradList });
         result.records.forEach(record => {
             let grad1 = record.get("grad_one").properties.email;
