@@ -1,8 +1,9 @@
 import { IRequest } from "./IResponse";
+import { Syndicate } from "./SyndicateModel";
 
 export class PostAddLinkRequest implements IRequest {
     constructor(
-        syndicateId: number,
-        gradEmail: string
+        public gradEmail: string,
+        public syndicate: Syndicate
     ) { }
 }

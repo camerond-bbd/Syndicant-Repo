@@ -20,7 +20,8 @@ export class AddSyndicateComponent implements OnInit {
   addSyndicate(){
     this.httpService.PostAddSyndicateRequest(new PostAddSyndicateRequest(this.name, this.levelUp))
       .subscribe((response) => {
-
+        console.log("Added syndicate");
+        console.log(response);
       });
   }
 

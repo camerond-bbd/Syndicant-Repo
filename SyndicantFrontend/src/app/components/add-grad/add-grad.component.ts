@@ -20,7 +20,8 @@ export class AddGradComponent implements OnInit {
   addGrad(): void {
     this.httpService.PostAddGradRequest(new PostAddGradRequest(this.name, this.email))
       .subscribe((response) => {
-        
+        console.log("Added grad");
+        console.log(response);
     });
   }
 
