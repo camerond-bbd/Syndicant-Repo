@@ -34,7 +34,25 @@ export class HomeComponent implements OnInit {
         console.log("Received response");
         console.log(response);
 
-        this.gradList = response;
+        sendList.forEach(element => {
+          this.gradList.push(new CompatibilityResponse("", []));
+        });
+
+        let count = 0;
+
+        Object.keys(response).forEach(k => {
+          this.gradList[count].gradEmail = k;
+          count++;
+        });
+
+        count = 0;
+
+        Object.values(response).forEach(r => {
+          this.gradList[count].otherGradEmail = r;
+          count++;
+        });
+
+        //this.gradList = response;
       })
 
   }

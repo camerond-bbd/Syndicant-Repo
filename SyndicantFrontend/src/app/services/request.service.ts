@@ -62,7 +62,7 @@ export class RequestService {
   }
 
   public testCompatibility(gradList: string[]) {
-    return this.http.post<CompatibilityResponse[]>(this.url + "worked_with", {
+    return this.http.post(this.url + "worked_with", {
       grad_list: gradList
     });
   }
