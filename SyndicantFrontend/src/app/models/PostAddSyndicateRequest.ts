@@ -1,6 +1,8 @@
 import { IRequest } from "./IResponse";
 
-export interface PostAddSyndicateRequest extends IRequest {
-    name: string;
-    levelUp: string;
+export class PostAddSyndicateRequest implements IRequest {
+    constructor(
+        name: string,
+        levelUp: string
+    ) { }
 }

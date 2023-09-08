@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { PostAddLinkRequest } from 'src/app/models/PostLinkRequest';
+import { RequestService } from 'src/app/services/request.service';
 
 @Component({
   selector: 'app-syndicate-allocation',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SyndicateAllocationComponent implements OnInit {
 
-  constructor() { }
+  gradEmail: string = "";
+  syndicateId: number = -1;
+
+  constructor(private httpService: RequestService) { }
 
   ngOnInit(): void {
+  }
+
+  linkGradToSyndicate(): void {
+    this.httpService.PostLinkRequest(new PostAddLinkRequest(this.syndicateId, this.gradEmail))
+      .subscribe((response) => {
+        
+    });
   }
 
 }

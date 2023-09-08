@@ -1,6 +1,8 @@
 import { IRequest } from "./IResponse";
 
-export interface PostAddLinkRequest extends IRequest {
-    syndicateId: number;
-    gradEmail: string;
+export class PostAddLinkRequest implements IRequest {
+    constructor(
+        syndicateId: number,
+        gradEmail: string
+    ) { }
 }
