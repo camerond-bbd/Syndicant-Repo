@@ -11,6 +11,7 @@ import { PostAddLinkRequest } from '../models/PostLinkRequest';
 import { PostAddLinkResponse } from '../models/PostAddLinkResponse';
 import { Syndicate } from '../models/SyndicateModel';
 import { GradModel } from '../models/GradModel';
+import { ArrayType } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -57,5 +58,11 @@ export class RequestService {
 
   public GetAllLevelUps() {
     return this.http.get<string[]>(this.url + "levelups/all");
+  }
+
+  public testCompatibility(gradList: string[]) {
+    return this.http.post<ArrayType>(this.url + "worked_with", {
+      grad_list: gradList
+    });
   }
 }

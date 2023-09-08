@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { GradModel } from 'src/app/models/GradModel';
+import { RequestService } from 'src/app/services/request.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  gradText: string = "";
+  gradList: string[] = [];
+
+  constructor(private httpService: RequestService) { }
 
   ngOnInit(): void {
+  }
+
+  getNewList() {
+    let sendList = this.gradText.split(" ");
+    console.log(sendList);
+    this.httpService.testCompatibility(sendList)
+      .subscribe((response) => {
+        console.log("Received response");
+        console.log(response);
+      })
+
   }
 
 }
