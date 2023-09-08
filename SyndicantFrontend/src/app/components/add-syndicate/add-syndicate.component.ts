@@ -11,10 +11,15 @@ export class AddSyndicateComponent implements OnInit {
 
   name: string = "";
   levelUp: string = "";
+  levelUps: string[] = [];
   
   constructor(private httpService: RequestService) { }
 
   ngOnInit(): void {
+    this.httpService.GetAllLevelUps()
+      .subscribe((response) => {
+        this.levelUps = response;
+      });
   }
 
   addSyndicate(){

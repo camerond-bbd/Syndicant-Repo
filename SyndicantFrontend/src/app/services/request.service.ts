@@ -53,4 +53,8 @@ export class RequestService {
       levelUp: levelUp
     });
   }
+
+  public GetAllLevelUps() {
+    return this.http.get<string[]>(this.url + "levelups/all");
+  }
 }

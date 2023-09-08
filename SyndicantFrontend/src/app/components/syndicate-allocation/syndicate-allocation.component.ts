@@ -21,14 +21,10 @@ export class SyndicateAllocationComponent implements OnInit {
   constructor(private httpService: RequestService) { }
 
   ngOnInit(): void {
-    this.levelUps = [
-      "L1",
-      "Web",
-      "Security",
-      "NoSQL",
-      "Databases",
-      "OOP",
-    ]
+    this.httpService.GetAllLevelUps()
+      .subscribe((response) => {
+        this.levelUps = response;
+      });
   }
   
   getSyndicates() {
