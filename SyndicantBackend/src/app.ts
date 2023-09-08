@@ -217,7 +217,7 @@ app.post('/worked_with', async (req: Request, res:Response): Promise<void> => {
     const query = 
     'MATCH (grad_one: Grad WHERE grad_one.email IN $grad_list)' +
     '-[r:WORKED_ON]->' +
-    '(s:Syndicate)<-[WORKED_ON]-(grad_two: Grad WHERE grad_one.email IN $grad_list)' + 
+    '(s:Syndicate)<-[WORKED_ON]-(grad_two: Grad WHERE grad_two.email IN $grad_list)' + 
     'RETURN grad_one, grad_two';
 
     console.log(query);
