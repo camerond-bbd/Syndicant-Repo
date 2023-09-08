@@ -1,3 +1,4 @@
+import { ArrayType } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { PostAddLinkRequest } from 'src/app/models/PostLinkRequest';
 import { Syndicate } from 'src/app/models/SyndicateModel';
@@ -14,15 +15,31 @@ export class SyndicateAllocationComponent implements OnInit {
   syndicateName: string = "";
   levelUp: string = "";
 
+  levelUps: string[] = [];
   syndicates: Syndicate[] = [];
   
   constructor(private httpService: RequestService) { }
 
   ngOnInit(): void {
+    this.levelUps = [
+      "L1",
+      "Web",
+      "Security",
+      "NoSQL",
+      "Databases",
+      "OOP",
+    ]
   }
   
   getSyndicates() {
-    
+    this.httpService.GetSyndicatesByLevelUp(this.levelUp)
+      .subscribe((response) => {
+        console.log(response);
+        this.syndicates = [];
+        for (let i=0; i<response.length; i++) {
+          this.syndicates.push(new Syndicate(response[i].name, response[i].levelUp));
+        }
+      });
   }
 
   addSyndicate(){

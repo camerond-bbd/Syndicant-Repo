@@ -48,7 +48,9 @@ export class RequestService {
     return this.http.get<GetGradsResponse>(this.url + "grads/all");
   }
 
-  public GetSyndicatesByLevelUp(syndicate: Syndicate) {
-    return this.http.get(this.url + "syndicate/for-levelup")
+  public GetSyndicatesByLevelUp(levelUp: string) {
+    return this.http.post<Syndicate[]>(this.url + "syndicate/for-levelup", {
+      levelUp: levelUp
+    });
   }
 }
