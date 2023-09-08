@@ -175,7 +175,7 @@ app.get('/grad/all', async (_: Request, res: Response): Promise<void> => {
 });
 
 
-app.get('/grad/in-syndicate', async (req: Request, res: Response): Promise<void> => {
+app.post('/grad/in-syndicate', async (req: Request, res: Response): Promise<void> => {
   const syndicate = req.body;
 
   try {
@@ -189,7 +189,7 @@ app.get('/grad/in-syndicate', async (req: Request, res: Response): Promise<void>
   }
 });
 
-app.get('/grad/by_email', async (req: Request, res: Response): Promise<void> => {
+app.post('/grad/by_email', async (req: Request, res: Response): Promise<void> => {
   const email = req.body;
   console.log(email);
   try {
@@ -203,7 +203,7 @@ app.get('/grad/by_email', async (req: Request, res: Response): Promise<void> => 
   }
 });
 
-app.get('/worked_with', async (req: Request, res:Response): Promise<void> => {
+app.post('/worked_with', async (req: Request, res:Response): Promise<void> => {
 
   try {
     const gradListString = JSON.stringify (req.body.grad_list);
