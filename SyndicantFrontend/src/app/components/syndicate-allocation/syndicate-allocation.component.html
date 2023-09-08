@@ -1,17 +1,17 @@
 
-<main>
+<main class="general">
     <label>Graduate Email:</label>
-    <input type="text" [(ngModel)]="email"/><br/>
+    <input type="text" [(ngModel)]="email"/>
 
     <label>Select Level-Up</label>
     <select name="levelUps" [(ngModel)]="levelUp" (change)="getSyndicates()">
         <option *ngFor="let lu of levelUps" [value]="lu">{{ lu }}</option>
-    </select><br/>
+    </select>
 
     <label>Select Syndicate</label>
     <select name="syndicates"[(ngModel)]="syndicateName">
         <option *ngFor="let syndicate of syndicates" [value]="syndicate.name">{{ syndicate.name }}</option>
-    </select><br/>
+    </select>
 
     <button (click)="addSyndicate()"> Add </button>
 </main>
