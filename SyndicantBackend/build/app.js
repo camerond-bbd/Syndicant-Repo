@@ -69,8 +69,29 @@ app.post('/link', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json(result.records[0].get('r'));
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ error: 'An error occurred while creating the relationship.', extras: { error } });
+    }
+}));
+// get all syndicates
+app.get('/syndicate/all', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield session.run('Match (s:Syndicate) RETURN s');
+        res.json(result.records.map(record => record.get('s').properties));
+    }
+    catch (error) {
+        res.status(500).json({ error: 'An error occurred while retrieving all syndicates.', extras: { error } });
+    }
+}));
+//get syndicates in levelup
+app.get('/syndicate/for-levelup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const levelUp = req.body;
+    try {
+        const result = yield session.run('Match (s:Syndicate {levelUp:$levelUp}) RETURN s', levelUp);
+        res.json(result.records.map(record => record.get('s').properties));
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'An error occurred while retrieving all syndicates.', extras: { error } });
     }
 }));
 // Retrieve all Grads with their Syndicates
@@ -92,6 +113,36 @@ app.get('/grad', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         res.status(500).json({ error: 'An error occurred while fetching grads with syndicates.', extras: { error } });
+    }
+}));
+app.get('/grad/all', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield session.run('Match (g:Grad) RETURN g');
+        res.json(result.records.map(record => record.get('g').properties));
+    }
+    catch (error) {
+        res.status(500).json({ error: 'An error occurred while retrieving all grads.', extras: { error } });
+    }
+}));
+app.get('/grad/in-syndicate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const syndicate = req.body;
+    try {
+        const result = yield session.run('Match (g:Grad)-[WORKED_ON]->(s:Syndicate {name:$syndicate.name, levelUp:$syndicate.levelUp}) RETURN g', { syndicate: syndicate });
+        res.json(result.records.map(record => record.get('g').properties));
+    }
+    catch (error) {
+        res.status(500).json({ error: 'An error occurred while retrieving grads in that syndicate.', extras: { error } });
+    }
+}));
+app.get('/grad/by_email', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body;
+    console.log(email);
+    try {
+        const result = yield session.run('Match (g:Grad {email:$email}) RETURN g', email);
+        res.json(result.records[0].get('g').properties);
+    }
+    catch (error) {
+        res.status(500).json({ error: 'An error occurred while retrieving that grad.', extras: { error } });
     }
 }));
 app.get('/worked_with', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
