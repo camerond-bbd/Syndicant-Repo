@@ -108,7 +108,7 @@ app.get('/syndicate/all', async (req: Request, res: Response): Promise<void> => 
 });
 
 //get syndicates in levelup
-app.get('/syndicate/for-levelup', async (req: Request, res: Response): Promise<void> => {
+app.post('/syndicate/for-levelup', async (req: Request, res: Response): Promise<void> => {
 
   const levelUp = req.body
   try {
