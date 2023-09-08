@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
   }
 
   getNewList() {
-    let sendList = this.gradText.split(" ");
+    let sendList = this.gradText.split(/\s+/g);
     console.log(sendList);
 
     this.gradList = [];
