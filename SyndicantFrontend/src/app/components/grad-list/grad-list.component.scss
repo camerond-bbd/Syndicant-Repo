@@ -1,0 +1,13 @@
+main.general {
+  position: relative;
+  height: 50%;
+  width: 50vw; 
+  max-width: 450px;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-self: center;
+  justify-content: center;
+  gap:0.3rem;
+}
