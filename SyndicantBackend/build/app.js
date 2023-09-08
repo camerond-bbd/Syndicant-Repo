@@ -137,7 +137,7 @@ app.get('/grad/all', (_, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).json({ error: 'An error occurred while retrieving all grads.', extras: { error } });
     }
 }));
-app.get('/grad/in-syndicate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/grad/in-syndicate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const syndicate = req.body;
     try {
         const result = yield session.run('Match (g:Grad)-[WORKED_ON]->(s:Syndicate {name:$syndicate.name, levelUp:$syndicate.levelUp}) RETURN g', { syndicate: syndicate });
@@ -147,7 +147,7 @@ app.get('/grad/in-syndicate', (req, res) => __awaiter(void 0, void 0, void 0, fu
         res.status(500).json({ error: 'An error occurred while retrieving grads in that syndicate.', extras: { error } });
     }
 }));
-app.get('/grad/by_email', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/grad/by_email', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const email = req.body;
     console.log(email);
     try {
@@ -158,7 +158,7 @@ app.get('/grad/by_email', (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).json({ error: 'An error occurred while retrieving that grad.', extras: { error } });
     }
 }));
-app.get('/worked_with', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/worked_with', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const gradListString = JSON.stringify(req.body.grad_list);
         const gradList = req.body.grad_list;
