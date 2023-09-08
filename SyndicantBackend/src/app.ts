@@ -119,9 +119,21 @@ app.post('/syndicate/for-levelup', async (req: Request, res: Response): Promise<
     res.json(result.records.map(record => record.get('s').properties));
   } catch (error) {
     console.log(error)
-    res.status(500).json({ error: 'An error occurred while retrieving all syndicates.', extras: { error } });
+    res.status(500).json({ error: 'An error occurred while retrieving syndicates for this levelUp.', extras: { error } });
   }
 });
+
+app.get('/levelups/all',async (req:Request, res: Response): Promise<void> => {
+  try {
+    const result = await session.run(
+      'MATCH (s:Syndicate) RETURN COLLECT(DISTINCT s.levelUp) as levelups'
+    )
+
+    res.json(result.records[0].get('levelups'));
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while retrieving all levelUps.', extras: { error } });
+  }
+})
 
 
 // Retrieve all Grads with their Syndicates
