@@ -1,2 +1,14 @@
 <textarea [(ngModel)]="gradText"></textarea>
 <button (click)="getNewList()">Validate</button>
+
+<p>Conflicts: </p>
+<ul>
+    <ng-container *ngFor="let grad of gradList;">
+        <li>{{ grad.gradEmail }}</li>
+        <ul>
+            <ng-container *ngFor="let c of grad.otherGradEmail;">
+                <li class="error">{{ c }}</li>
+            </ng-container>
+        </ul>
+    </ng-container>    
+</ul>
