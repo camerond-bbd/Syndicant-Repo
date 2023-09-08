@@ -12,6 +12,7 @@ import { PostAddLinkResponse } from '../models/PostAddLinkResponse';
 import { Syndicate } from '../models/SyndicateModel';
 import { GradModel } from '../models/GradModel';
 import { ArrayType } from '@angular/compiler';
+import { CompatibilityResponse } from '../models/CompatibilityResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -61,7 +62,7 @@ export class RequestService {
   }
 
   public testCompatibility(gradList: string[]) {
-    return this.http.post<ArrayType>(this.url + "worked_with", {
+    return this.http.post<CompatibilityResponse[]>(this.url + "worked_with", {
       grad_list: gradList
     });
   }
